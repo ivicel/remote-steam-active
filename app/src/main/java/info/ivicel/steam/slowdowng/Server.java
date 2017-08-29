@@ -35,6 +35,6 @@ public class Server {
     
     @Override
     public String toString() {
-        return "[" + this.getName() + "] " + this.getAddress();
+        return "[" + this.getName() + "]\n" + this.getAddress();
     }
 }

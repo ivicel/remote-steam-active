@@ -70,6 +70,11 @@ public class RedeemCodeActivity extends AppCompatActivity {
                 while (m.find()) {
                     mKeyList.add(m.group());
                 }
+                if (mKeyList.size() <= 0) {
+                    Toast.makeText(RedeemCodeActivity.this, "keys error",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Intent i = new Intent(RedeemCodeActivity.this, ActivationActivity.class);
                 startActivity(i);
                 mController.redeemCode(mKeyList);

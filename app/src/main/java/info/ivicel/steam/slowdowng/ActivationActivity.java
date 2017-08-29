@@ -21,8 +21,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.Response;
 
@@ -34,13 +36,18 @@ public class ActivationActivity extends AppCompatActivity {
     private SocketController mController;
     private Handler mHandler;
     private ActivationAdapter mAdapter;
-    
+    private Map<String, String> mResultMap = new HashMap<>();
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activation);
-    
+        mResultMap.put("AlreadyPurchased", "已拥有");
+        mResultMap.put("DuplicateActivationCode", "重复激活");
+        mResultMap.put("BadActivationCode", "无效激活码");
+        mResultMap.put("RateLimited", "次数上限");
+        mResultMap.put("DoesNotOwnRequiredApp", "缺少主游戏");
+        mResultMap.put("RestrictedCountry", "区域限制");
         mResultList = new ArrayList<>();
         mController = SocketController.getInstance();
         mController.setOnRedeemListener(new OnRedeemListener());
@@ -90,7 +97,6 @@ public class ActivationActivity extends AppCompatActivity {
             private TextView subTextView;
             private LinearLayout mSubDetails;
             private View view4;
-            private View itemView;
             
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -100,7 +106,6 @@ public class ActivationActivity extends AppCompatActivity {
                 subTextView = (TextView)itemView.findViewById(R.id.sub_text);
                 mSubDetails = (LinearLayout)itemView.findViewById(R.id.sub_details);
                 view4 = itemView.findViewById(R.id.view4);
-                this.itemView = itemView;
             }
         }
     
@@ -109,7 +114,7 @@ public class ActivationActivity extends AppCompatActivity {
             ActivateResult activateResult = mResultList.get(position);
             holder.activateKey.setText(activateResult.getKey());
             holder.activateResult.setText(activateResult.getResult());
-            holder.activateDetail.setText(activateResult.getDetails());
+            holder.activateDetail.setText(mResultMap.get(activateResult.getDetails()));
             
             if (activateResult.getPackages().size() > 0) {
                 holder.subTextView.setVisibility(View.VISIBLE);

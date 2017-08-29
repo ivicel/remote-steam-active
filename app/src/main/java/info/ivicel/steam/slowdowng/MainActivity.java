@@ -1,6 +1,6 @@
 package info.ivicel.steam.slowdowng;
 
-import android.app.ProgressDialog;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +26,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import org.json.JSONObject;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import okhttp3.Response;
 
 import static android.text.TextUtils.isEmpty;
@@ -48,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private LoginConnectListener mLoginConnectListener = new LoginConnectListener();
     private Handler mHandler;
     private ProgressBar mProgressBar;
+    private Timer mTimer;
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -90,18 +95,7 @@ public class MainActivity extends AppCompatActivity {
         mProgressBar = (ProgressBar)findViewById(R.id.progressbar);
         spref = new SecuritySharedPreference(this, "user_info", Context.MODE_PRIVATE);
         
-        
-        String username = spref.getString("username", null);
-        String password = spref.getString("password", null);
-        if (username != null) {
-            userEditText.setText(username);
-        }
-        if (password != null) {
-            passwordEditText.setText(password);
-            checkBox.setChecked(true);
-        }
-    
-        initServerList();
+        // set some event listeners
         mainButton.setOnClickListener(new LoginClickListener());
         mController = SocketController.getInstance();
         mController.setOnLoginListener(mLoginConnectListener);
@@ -131,6 +125,25 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        resumeUserInfo();
+        initServerList();
+    }
+    
+    private void resumeUserInfo() {
+        String username = spref.getString("username", null);
+        String password = spref.getString("password", null);
+        if (username != null) {
+            userEditText.setText(username);
+        }
+        if (password != null) {
+            passwordEditText.setText(password);
+            checkBox.setChecked(true);
+        }
     }
     
     @Override
@@ -206,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
         Spinner serverSpinner = (Spinner)findViewById(R.id.server_name);
         serverSpinner.setAdapter(adapter);
+        serverSpinner.setPrompt("Choose a server");
         serverSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -249,13 +263,15 @@ public class MainActivity extends AppCompatActivity {
                 editor.clear();
             }
             if (mCurrentServer != null) {
-                if (!mController.isConnected()) {
-                    mLoginConnectListener.setUsername(username);
-                    mLoginConnectListener.setPassword(password);
-                    mController.initConnection(mCurrentServer.getAddress());
-                    showProgress();
-                    Log.d(TAG, "onClick: initial connection " + mCurrentServer.getAddress());
+                if (mController.isConnected()) {
+                    mController.login(username, password);
+                } else {
+                    if (mTimer != null) {
+                        mTimer.cancel();
+                    }
+                    mController.login(mCurrentServer.getAddress(), username, password);
                 }
+                showProgress();
             } else {
                 Toast.makeText(MainActivity.this, "empty server", Toast.LENGTH_SHORT).show();
             }
@@ -263,14 +279,6 @@ public class MainActivity extends AppCompatActivity {
     }
     
     private class LoginConnectListener implements SocketController.OnLoginListener {
-        private String username;
-        private String password;
-        
-        @Override
-        public void onConnect(JSONObject object) {
-            mController.login(username, password);
-        }
-    
         @Override
         public void onLogin(final JSONObject object) {
             String result = object.optString("result");
@@ -292,14 +300,6 @@ public class MainActivity extends AppCompatActivity {
             Message msg = mHandler.obtainMessage(MESSAGE_NEED_AUTHCODE);
             msg.sendToTarget();
             Log.d(TAG, "onAuthCode: ");
-        }
-    
-        public void setUsername(String username) {
-            this.username = username;
-        }
-    
-        public void setPassword(String password) {
-            this.password = password;
         }
     }
     
@@ -338,6 +338,18 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("server_address", mCurrentServer.getAddress());
         editor.putInt("server_position", mPosition);
         editor.apply();
+        if (mCurrentServer.getAddress() != null) {
+            if (mTimer != null) {
+                mTimer.cancel();
+            }
+            mTimer = new Timer();
+            mTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    mController.connectToServer(mCurrentServer.getAddress());
+                }
+            }, 3000);
+        }
     }
     
     private void resumeCurrentServer(Spinner spinner) {

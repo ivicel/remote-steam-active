@@ -10,7 +10,7 @@
 
     <EditText
         android:hint="@string/code_hint"
-        android:inputType="text"
+        android:inputType="textMultiLine"
         android:id="@+id/keys"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

@@ -22,8 +22,13 @@ public class ServerDatabase extends SQLiteOpenHelper {
                 "CREATE TABLE servers(" +
                 "id INTEGER PRIMARY KEY," +
                 "name TEXT," +
-                "address TEXT)";
+                "address TEXT);";
+        String sql2 = "INSERT INTO servers(name, address) VALUES (" +
+                "\"China SteamCN\"," +
+                "\"https://cdkey.steamcn.com\"" +
+                ");";
         db.execSQL(sql);
+        db.execSQL(sql2);
     }
 
     @Override

@@ -29,7 +29,6 @@ public class SocketController {
     private boolean connected = false;
     
     public interface OnLoginListener {
-        void onConnect(JSONObject object);
         void onLogin(final JSONObject object);
         void onAuthCode(JSONObject object);
     }
@@ -59,6 +58,11 @@ public class SocketController {
             mController = new SocketController();
         }
         return mController;
+    }
+    
+    public boolean login(String url, String username, String password) {
+        initConnection(url, username, password);
+        return true;
     }
     
     public boolean login(String username, String password) {
@@ -106,7 +110,7 @@ public class SocketController {
         return result;
     }
     
-    public void initConnection(final String url) {
+    public void initConnection(final String url, final String username, final String password) {
         String ends = url.endsWith("/") ? "ws" : "/ws";
         final String serverUrl = url.replaceFirst("http", "ws") + ends;
         
@@ -130,12 +134,15 @@ public class SocketController {
                     String action = responseJson.getString("action");
                     if ("connect".equalsIgnoreCase(action)) {
                         connected = true;
-                        mLoginListener.onConnect(responseJson);
+                        if (username != null && password != null) {
+                            login(username, password);
+                        }
                     } else if ("logOn".equalsIgnoreCase(action)) {
                         mLoginListener.onLogin(responseJson);
                     } else if ("authCode".equalsIgnoreCase(action)) {
                         mLoginListener.onAuthCode(responseJson);
                     } else if ("redeem".equalsIgnoreCase(action)) {
+                        Log.d(TAG, "onMessage: " + text);
                         mRedeemListener.onRedeem(responseJson);
                     }
                 } catch (JSONException e) {
@@ -165,7 +172,6 @@ public class SocketController {
             @Override
             public void onFailure(WebSocket webSocket, Throwable t, Response response) {
                 super.onFailure(webSocket, t, response);
-                Log.d(TAG, "onFailure: " + Log.getStackTraceString(t));
                 if (mConnectFailure != null) {
                     mConnectFailure.onConnectFailure(t, response);
                 }
@@ -182,5 +188,10 @@ public class SocketController {
     
     public boolean isConnected() {
         return this.connected;
+    }
+    
+    public void connectToServer(String url) {
+        close();
+        initConnection(url, null, null);
     }
 }
