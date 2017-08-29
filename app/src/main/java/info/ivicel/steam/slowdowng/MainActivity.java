@@ -12,10 +12,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -105,8 +105,9 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                Toast.makeText(MainActivity.this, "connection failed", Toast.LENGTH_SHORT).show();
-        
+                        dimissProgress();
+                        Toast.makeText(MainActivity.this, "connection failed",
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -126,12 +127,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         resumeUserInfo();
-        
-    }
-    
-    @Override
-    protected void onResume() {
-        super.onResume();
         initServerList();
     }
     
@@ -271,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
                     if (mTimer != null) {
                         mTimer.cancel();
                     }
-                    mController.login(mCurrentServer.getAddress(), username, password);
+                    mController.login(username, password, mCurrentServer.getAddress());
                 }
                 showProgress();
             } else {
@@ -285,7 +280,6 @@ public class MainActivity extends AppCompatActivity {
         public void onLogin(final JSONObject object) {
             String result = object.optString("result");
             if ("failed".equalsIgnoreCase(result)) {
-                Log.d(TAG, "onLogin: failed");
                 Message msg = mHandler.obtainMessage(1);
                 msg.obj = object.optString("message");
                 msg.sendToTarget();
@@ -301,12 +295,11 @@ public class MainActivity extends AppCompatActivity {
         public void onAuthCode(JSONObject object) {
             Message msg = mHandler.obtainMessage(MESSAGE_NEED_AUTHCODE);
             msg.sendToTarget();
-            Log.d(TAG, "onAuthCode: ");
         }
     }
     
     private void showAuthCodeDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
+        AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Please input your Steam Guard Authcode")
                 .setView(R.layout.authcode)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -326,12 +319,12 @@ public class MainActivity extends AppCompatActivity {
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mController.close();
                         Toast.makeText(MainActivity.this, "Login failed.", Toast.LENGTH_SHORT).show();
                     }
                 })
-                .setCancelable(false);
-        builder.show();
+                .setCancelable(false).create();
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        dialog.show();
     }
     
     private void saveCurrentServer() {
@@ -350,7 +343,7 @@ public class MainActivity extends AppCompatActivity {
                 public void run() {
                     mController.connectToServer(mCurrentServer.getAddress());
                 }
-            }, 3000);
+            }, 2000);
         }
     }
     
@@ -371,5 +364,11 @@ public class MainActivity extends AppCompatActivity {
     
     private void dimissProgress() {
         mProgressBar.setVisibility(View.GONE);
+    }
+    
+    @Override
+    protected void onStop() {
+        super.onStop();
+        db.close();
     }
 }

@@ -60,8 +60,9 @@ public class SocketController {
         return mController;
     }
     
-    public boolean login(String url, String username, String password) {
-        initConnection(url, username, password);
+    
+    public boolean login(String username, String password, String url) {
+        initConnection(username, password, url);
         return true;
     }
     
@@ -79,6 +80,7 @@ public class SocketController {
         }
         return result;
     }
+
     
     public boolean sendAuthCode(String authCode) {
         boolean result = false;
@@ -110,7 +112,7 @@ public class SocketController {
         return result;
     }
     
-    public void initConnection(final String url, final String username, final String password) {
+    private void initConnection(final String username, final String password, final String url) {
         String ends = url.endsWith("/") ? "ws" : "/ws";
         final String serverUrl = url.replaceFirst("http", "ws") + ends;
         
@@ -155,14 +157,12 @@ public class SocketController {
     
             @Override
             public void onClosed(WebSocket webSocket, int code, String reason) {
-                Log.d(TAG, "onClosed: websocket closed");
                 super.onClosed(webSocket, code, reason);
                 connected = false;
             }
     
             @Override
             public void onClosing(WebSocket webSocket, int code, String reason) {
-                Log.d(TAG, "onClosing: websocket closing");
                 super.onClosing(webSocket, code, reason);
             }
     
@@ -189,6 +189,6 @@ public class SocketController {
     
     public void connectToServer(String url) {
         close();
-        initConnection(url, null, null);
+        initConnection(null, null, url);
     }
 }
