@@ -125,12 +125,13 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+        resumeUserInfo();
+        
     }
     
     @Override
     protected void onResume() {
         super.onResume();
-        resumeUserInfo();
         initServerList();
     }
     
@@ -258,10 +259,11 @@ public class MainActivity extends AppCompatActivity {
             if (isRememberMe) {
                 editor.putString("username", username);
                 editor.putString("password", password);
-                editor.apply();
             } else {
                 editor.clear();
             }
+            editor.apply();
+                
             if (mCurrentServer != null) {
                 if (mController.isConnected()) {
                     mController.login(username, password);

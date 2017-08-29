@@ -11,18 +11,21 @@
         android:roundIcon="@mipmap/steam_red_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ServerEditActivity">
+        <activity android:name=".ServerEditActivity"
+                  android:windowSoftInputMode="adjustResize|stateHidden">
         </activity>
         <activity android:name=".RedeemCodeActivity">
         </activity>
-        <activity android:name=".ActivationActivity">
+        <activity android:name=".ActivationActivity"
+                  android:windowSoftInputMode="adjustResize|stateHidden">
 
         </activity>
     </application>
