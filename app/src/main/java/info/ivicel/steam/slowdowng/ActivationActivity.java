@@ -42,6 +42,7 @@ public class ActivationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activation);
+        mResultMap.put("NoDetail", "----");
         mResultMap.put("AlreadyPurchased", "已拥有");
         mResultMap.put("DuplicateActivationCode", "重复激活");
         mResultMap.put("BadActivationCode", "无效激活码");

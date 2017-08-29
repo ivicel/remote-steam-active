@@ -122,13 +122,11 @@ public class SocketController {
         client.newWebSocket(request, new WebSocketListener() {
             @Override
             public void onOpen(WebSocket webSocket, Response response) {
-                Log.d(TAG, "onOpen: connecting to " + serverUrl);
                 mWebSocket = webSocket;
             }
     
             @Override
             public void onMessage(WebSocket webSocket, String text) {
-                Log.d(TAG, "onMessage: receive -> " + text);
                 try {
                     JSONObject responseJson = new JSONObject(text);
                     String action = responseJson.getString("action");
@@ -142,7 +140,6 @@ public class SocketController {
                     } else if ("authCode".equalsIgnoreCase(action)) {
                         mLoginListener.onAuthCode(responseJson);
                     } else if ("redeem".equalsIgnoreCase(action)) {
-                        Log.d(TAG, "onMessage: " + text);
                         mRedeemListener.onRedeem(responseJson);
                     }
                 } catch (JSONException e) {

@@ -89,6 +89,7 @@ public class RedeemCodeActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mKeyList.clear();
+        codeEditText.setText("");
     }
     
     @Override
