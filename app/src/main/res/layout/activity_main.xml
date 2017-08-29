@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="info.ivicel.steam.slowdowng.MainActivity">
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        android:id="@+id/progressbar"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/server_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/server"
+        android:textSize="17sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/server_name"
+        android:layout_marginBottom="0dp"
+        app:layout_constraintTop_toTopOf="@+id/server_name"
+        android:layout_marginTop="0dp"/>
+
+    <Spinner
+        android:id="@+id/server_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:hint="@string/server_example"
+        android:textSize="23sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/server_text"
+        app:layout_constraintRight_toRightOf="@+id/username"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.29000002"
+        />
+
+
+
+    <TextView
+        android:id="@+id/username_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/username"
+        android:textSize="17sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/username"
+        app:layout_constraintRight_toRightOf="@+id/server_text"/>
+
+    <TextView
+        android:id="@+id/password_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/password"
+        app:layout_constraintBaseline_toBaselineOf="@+id/password"
+        android:textSize="17sp"
+        app:layout_constraintRight_toRightOf="@+id/username_text"/>
+
+    <EditText
+        android:id="@+id/username"
+        android:inputType="text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="@+id/password"
+        app:layout_constraintLeft_toLeftOf="@+id/server_name"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/server_name"/>
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        android:inputType="textPassword"
+        android:layout_marginTop="7dp"
+        app:layout_constraintTop_toBottomOf="@+id/username"
+        android:layout_marginRight="23dp"
+        app:layout_constraintLeft_toLeftOf="@+id/username"
+        android:layout_marginEnd="23dp"/>
+
+
+    
+    <Button
+        android:id="@+id/main_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login"
+        app:layout_constraintLeft_toLeftOf="@+id/password_text"
+        app:layout_constraintTop_toBottomOf="@+id/password"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/main_button"
+        app:layout_constraintTop_toTopOf="@+id/main_button"
+        app:layout_constraintBottom_toBottomOf="@+id/main_button"
+        android:hint="@string/remember_me"
+        android:id="@+id/remember_me"/>
+
+
+</android.support.constraint.ConstraintLayout>
