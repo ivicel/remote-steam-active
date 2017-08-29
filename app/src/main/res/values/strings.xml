@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">SlowDownG</string>
+    <string name="username">Username</string>
+    <string name="server">Current Server</string>
+    <string name="username_empty">username should not be empty.</string>
+    <string name="password">Password</string>
+    <string name="password_empty">password should not be empty.</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="redeem">Redeem</string>
+    <string name="remember_me">Remember Me</string>
+    <string name="server_example">http[s]://example.com</string>
+    <string name="add_server">Add</string>
+    <string name="edit_server">Edit</string>
+    <string name="delete_server">Delete</string>
+    <string name="server_name">Name</string>
+    <string name="server_address">Address</string>
+    <string name="save_server">Save</string>
+    <string name="discard_server">Discard</string>
+    <string name="code_hint">input your key/code here</string>
+    <string name="authcode">input your authcode</string>
+    <string name="key">Key</string>
+    <string name="result">Result</string>
+    <string name="detail">Detail</string>
+    <string name="sub_detail">Sub Details</string>
+</resources>
