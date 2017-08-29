@@ -23,4 +23,11 @@
     <string name="result">Result</string>
     <string name="detail">Detail</string>
     <string name="sub_detail">Sub Details</string>
+
+    <string name="AlreadyPurchased">已拥有</string>
+    <string name="DuplicateActivationCode">重复激活</string>
+    <string name="BadActivationCode">无效激活码</string>
+    <string name="RateLimited">次数上限</string>
+    <string name="DoesNotOwnRequiredApp">缺少主游戏</string>
+    <string name="RestrictedCountry">区域限制</string>
 </resources>

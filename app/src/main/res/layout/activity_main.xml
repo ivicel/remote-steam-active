@@ -34,6 +34,7 @@
         android:layout_marginTop="0dp"/>
 
     <Spinner
+        android:spinnerMode="dialog"
         android:id="@+id/server_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
