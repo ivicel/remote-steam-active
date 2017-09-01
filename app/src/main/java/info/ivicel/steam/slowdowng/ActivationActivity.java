@@ -191,6 +191,7 @@ public class ActivationActivity extends AppCompatActivity {
             return activateResult;
         } catch (JSONException e) {
             // e.printStackTrace();
+            
         }
         return null;
     }
