@@ -37,7 +37,7 @@ public class ActivationActivity extends AppCompatActivity {
     private Handler mHandler;
     private ActivationAdapter mAdapter;
     private Map<String, String> mResultMap = new HashMap<>();
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +68,7 @@ public class ActivationActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(layoutManager);
-    
+
         mController.setOnConnectFailure(new SocketController.OnConnectFailure() {
             @Override
             public void onConnectFailure(Throwable t, Response response) {
@@ -82,15 +82,15 @@ public class ActivationActivity extends AppCompatActivity {
             }
         });
     }
-    
+
     class ActivationAdapter extends RecyclerView.Adapter<ActivationAdapter.ViewHolder> {
         private List<ActivateResult> mResultList;
         private Context mContext;
-        
+
         public ActivationAdapter(List<ActivateResult> resultList) {
             mResultList = resultList;
         }
-    
+
         class ViewHolder extends RecyclerView.ViewHolder {
             private TextView activateKey;
             private TextView activateResult;
@@ -98,7 +98,7 @@ public class ActivationActivity extends AppCompatActivity {
             private TextView subTextView;
             private LinearLayout mSubDetails;
             private View view4;
-            
+
             public ViewHolder(View itemView) {
                 super(itemView);
                 activateKey = (TextView)itemView.findViewById(R.id.activate_item_key);
@@ -109,14 +109,14 @@ public class ActivationActivity extends AppCompatActivity {
                 view4 = itemView.findViewById(R.id.view4);
             }
         }
-    
+
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             ActivateResult activateResult = mResultList.get(position);
             holder.activateKey.setText(activateResult.getKey());
             holder.activateResult.setText(activateResult.getResult());
             holder.activateDetail.setText(mResultMap.get(activateResult.getDetails()));
-            
+
             if (activateResult.getPackages().size() > 0) {
                 holder.subTextView.setVisibility(View.VISIBLE);
                 holder.view4.setVisibility(View.VISIBLE);
@@ -143,12 +143,12 @@ public class ActivationActivity extends AppCompatActivity {
                 }
             }
         }
-    
+
         @Override
         public int getItemCount() {
             return mResultList.size();
         }
-    
+
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             mContext = parent.getContext();
@@ -156,7 +156,7 @@ public class ActivationActivity extends AppCompatActivity {
             return new ViewHolder(view);
         }
     }
-    
+
     private class OnRedeemListener implements SocketController.OnRedeemListener {
         @Override
         public void onRedeem(JSONObject object) {
@@ -168,7 +168,7 @@ public class ActivationActivity extends AppCompatActivity {
             }
         }
     }
-    
+
     private ActivateResult parseJSON(JSONObject object) {
         try {
             JSONObject detailJsonObject = object.getJSONObject("detail");
@@ -191,7 +191,6 @@ public class ActivationActivity extends AppCompatActivity {
             return activateResult;
         } catch (JSONException e) {
             // e.printStackTrace();
-            
         }
         return null;
     }
